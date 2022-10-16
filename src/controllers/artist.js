@@ -43,8 +43,9 @@ exports.create = async (req, res) => {
     } else {
       res.status(200).json(artist);
     }
+  
     db.end();
-    };
+  };
 
     exports.update = async (req, res) => {
       const db = await getDb();
