@@ -5,7 +5,8 @@ exports.create = async (req, res) => {
   const { name, genre } = req.body;
 
   try {
-    await db.query('INSERT INTO Artist (name, genre) VALUES (?, ?)', [
+    await db.query('INSERT INTO Artist (name, genre) VALUES (?, ?)', 
+    [
       name,
       genre,
     ]);
@@ -34,7 +35,8 @@ exports.create = async (req, res) => {
     const db = await getDb();
     const { artistId } = req.params;
   
-    const [[artist]] = await db.query('SELECT * FROM Artist WHERE id = ?', [
+    const [[artist]] = await db.query('SELECT * FROM Artist WHERE id = ?', 
+    [
       artistId,
     ]);
   
@@ -55,7 +57,8 @@ exports.create = async (req, res) => {
       try {
         const [
           { affectedRows },
-        ] = await db.query('UPDATE Artist SET ? WHERE id = ?', [
+        ] = await db.query('UPDATE Artist SET ? WHERE id = ?', 
+        [
           data, 
           artistId,
         ]);
@@ -78,7 +81,8 @@ exports.create = async (req, res) => {
       try {
         const [
           { affectedRows },
-        ] = await db.query('DELETE FROM Artist WHERE id = ?', [
+        ] = await db.query('DELETE FROM Artist WHERE id = ?', 
+        [
           artistId,
         ]);
 
