@@ -1,4 +1,3 @@
-/* eslint-disable no-undef */
 const { expect } = require('chai');
 const request = require('supertest');
 const getDb = require('../src/services/db');
@@ -8,7 +7,7 @@ describe('delete Album', () => {
   let db;
   let albums;
 
-    beforeEach(async () => {
+  beforeEach(async () => {
     db = await getDb();
 
     await Promise.all([
@@ -26,7 +25,35 @@ describe('delete Album', () => {
       ]),
     ]);
 
-  [artists] = await db.query('SELECT * from Artist');
+    const [[tame_impala]] = await db.query(
+      'SELECT id FROM Artist WHERE name=?',
+      ['Tame Impala']
+    );
+
+    const [[kylie_minogue]] = await db.query(
+      'SELECT id FROM Artist WHERE name=?',
+      ['Kylie Minogue']
+    );
+
+    const [[dave_brubeck]] = await db.query(
+      'SELECT id FROM Artist WHERE name=?',
+      ['Dave Brubeck']
+    );
+
+    await Promise.all([
+      db.query('INSERT INTO Album(name, year, artistId) VALUES(?,?,?)', [
+        'Innerspeaker',
+        2010,
+        tame_impala.id,
+        'Fever',
+        2001,
+        kylie_minogue.id,
+        'Time Out',
+        1959,
+        dave_brubeck.id,
+      ]),
+    ]);
+    [albums] = await db.query('SELECT * from Album');
   });
 
   afterEach(async () => {
@@ -43,9 +70,10 @@ describe('delete Album', () => {
 
         expect(res.status).to.equal(200);
 
-        const [
-          [deletedAlbumRecord],
-        ] = await db.query('SELECT * FROM Artist WHERE id = ?', [album.id]);
+        const [[deletedAlbumRecord]] = await db.query(
+          'SELECT * FROM Album WHERE id = ?',
+          [album.id]
+        );
 
         expect(!!deletedAlbumRecord).to.be.false;
       });
